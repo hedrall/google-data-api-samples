@@ -1,17 +1,17 @@
 // GAのAPIの利用例です
 
 // トークンの取得のため
-import { auth, JWT } from 'google-auth-library';
+const { auth } = require( 'google-auth-library' );
 // HTTPリクエストにはaxiosを使用します。
-import * as axios from 'axios';
-import * as path from 'path';
+const axios  = require( 'axios' );
+const path = require( 'path' );
 
 ( async () => {
   // --- start OAuthアクセストークンを手に入れる ---
   // credentialファイルを読み込む
   const credentialJson = require( path.resolve( `${__dirname}/../credentials/ga.json` ) );
   
-  const client = auth.fromJSON( credentialJson ) as JWT;
+  const client = auth.fromJSON( credentialJson );
   // 許可するスコープを定義
   client.scopes = ['https://www.googleapis.com/auth/analytics.readonly'];
   await client.authorize();
@@ -23,7 +23,7 @@ import * as path from 'path';
   const query = {
     reportRequests: [
       {
-        viewId: '{{ ビューIDを入力する }}',
+        viewId: '{{ GAのビューIDを入力 }}',
         // レポートの期間
         dateRanges: [ {
           startDate: '2020-04-01',
@@ -58,7 +58,6 @@ import * as path from 'path';
   const response = await axios.post(
     'https://analyticsreporting.googleapis.com/v4/reports:batchGet',
     query,
-    // xml,
     {
       headers: {
         // アクセストークンを設定
@@ -69,8 +68,8 @@ import * as path from 'path';
   // --- start リクエストを実行する ---
   
   // 出力
-  console.table( response.data.reports[0].data.rows.map( ( row: any ) => {
+  console.table( response.data.reports[0].data.rows.map( row => {
     return [ ...row.dimensions, ...row.metrics[0].values ];
   }) );
   
-} )();
+} )().catch( e => console.log( e ) );

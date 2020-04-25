@@ -20,6 +20,9 @@
   },
   "dependencies": {
     "@google-cloud/bigquery": "^4.7.0",
-    "google-auth-library": "^6.0.0"
+    "google-auth-library": "^6.0.0",
+    "googleapis": "^49.0.0",
+    "request": "^2.88.2",
+    "xml-js": "^1.6.11"
   }
 }
